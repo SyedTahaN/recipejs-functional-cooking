@@ -209,4 +209,72 @@ main {
     .sort-btn {
         width: 100%;
     }
+
+}
+
+/* Search Container */
+.search-container {
+    max-width: 500px;
+    margin: 1.5rem auto 0;
+    position: relative;
+}
+
+#search-input {
+    /* Full width, padding, rounded corners */
+    width: 100%;
+    padding: 10px 40px 10px 12px; /* extra right padding for clear button */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+#search-input:focus {
+    /* Remove outline, add box-shadow */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.clear-btn {
+    /* Position absolute, right side, vertically centered */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+}
+/***************************
+   Recipe Counter
+***************************/
+.recipe-info {
+    /* Center text, add margin */
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/***************************
+   Favorite Button on Cards
+***************************/
+.recipe-card {
+    /* Needed so absolute button positions relative to card */
+    position: relative;
+}
+
+.favorite-btn {
+    /* Position in top-right corner of card */
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+}
+
+/* Hover effect */
+.favorite-btn:hover {
+    /* Scale up slightly */
+    transform: scale(1.1);
 }
