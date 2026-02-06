@@ -68,6 +68,10 @@ const recipes = [
 // State variables
 let currentFilter = 'all';
 let currentSort = 'none';
+// NEW: Add these
+let searchQuery = '';
+let favorites = JSON.parse(localStorage.getItem('recipeFavorites')) || [];
+let debounceTimer;
 
 // Select container
 const recipeContainer = document.querySelector("#recipe-container");
@@ -76,10 +80,23 @@ const recipeContainer = document.querySelector("#recipe-container");
 const filterButtons = document.querySelectorAll('.filter-btn');
 const sortButtons = document.querySelectorAll('.sort-btn');
 
+// NEW: Add these
+const searchInput = document.querySelector('#search-input');
+const clearSearchBtn = document.querySelector('#clear-search');
+const recipeCountDisplay = document.querySelector('#recipe-count');
+
 // Create single recipe card
 const createRecipeCard = (recipe) => {
+      // Check if favorited
+    const isFavorited = favorites.includes(recipe.id);
+    const heartIcon = isFavorited ? '❤️' : '🤍';
     return `
         <div class="recipe-card" data-id="${recipe.id}">
+        <!-- NEW: Favorite Button -->
+            <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" 
+                    data-recipe-id="${recipe.id}">
+                ${heartIcon}
+            </button>
             <h3>${recipe.title}</h3>
             <div class="recipe-meta">
                 <span>⏱️ ${recipe.time} min</span>
@@ -146,6 +163,46 @@ const applyFilter = (recipes, filterType) => {
             return recipes;  // Return all recipes (no filter)
     }
 };
+
+// ============================================
+// PURE FILTER FUNCTIONS
+// ============================================
+
+// NEW: Search filter
+const filterBySearch = (recipes, query) => {
+    if (!query || query.trim() === '') {
+        return recipes;
+    }
+    
+    const lowerQuery = query.toLowerCase().trim();
+    
+    return recipes.filter(recipe => {
+        // Search in title
+        const titleMatch = recipe.title
+            .toLowerCase()
+            .includes(lowerQuery);
+        
+        // Search in ingredients
+        const ingredientMatch = recipe.ingredients.some(ingredient =>
+            ingredient.toLowerCase().includes(lowerQuery)
+        );
+        
+        // Search in description
+        const descriptionMatch = recipe.description
+            .toLowerCase()
+            .includes(lowerQuery);
+        
+        return titleMatch || ingredientMatch || descriptionMatch;
+    });
+};
+// NEW: Favorites filter
+const filterFavorites = (recipes) => {
+    // Return only recipes whose id exists in favorites array
+    return recipes.filter(recipe => 
+        favorites.includes(recipe.id)
+    );
+};
+
 
 // ============================================
 // PURE SORT FUNCTIONS
@@ -292,4 +349,5 @@ const setupEventListeners = () => {
     });
     
     console.log('Event listeners attached!');
+
 };
